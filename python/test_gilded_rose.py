@@ -31,6 +31,13 @@ class GildedRoseTest(unittest.TestCase):
                 'very_close': Item("Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=10),
                 'expired': Item("Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=10),
                 'near_max_quality': Item("Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49),
+            },
+            # Conjured items at different states
+            'conjured': {
+                'standard': Item("Conjured Mana Cake", sell_in=5, quality=10),
+                'expired': Item("Conjured Mana Cake", sell_in=0, quality=10),
+                'low_quality': Item("Conjured Mana Cake", sell_in=5, quality=1),
+                'zero_quality': Item("Conjured Mana Cake", sell_in=5, quality=0),
             }
         }
 
@@ -117,6 +124,34 @@ class GildedRoseTest(unittest.TestCase):
         gilded_rose.update_quality()
         self.assertEqual(4, item.sell_in)
         self.assertEqual(50, item.quality)
+
+    def test_conjured_item_before_sell_date(self):
+        item = self._create_item_copy(self.items['conjured']['standard'])
+        gilded_rose = GildedRose([item])
+        gilded_rose.update_quality()
+        self.assertEqual(4, item.sell_in)
+        self.assertEqual(8, item.quality)  # Degrades by 2
+
+    def test_conjured_item_after_sell_date(self):
+        item = self._create_item_copy(self.items['conjured']['expired'])
+        gilded_rose = GildedRose([item])
+        gilded_rose.update_quality()
+        self.assertEqual(-1, item.sell_in)
+        self.assertEqual(6, item.quality)  # Degrades by 4
+
+    def test_conjured_item_near_zero_quality(self):
+        item = self._create_item_copy(self.items['conjured']['low_quality'])
+        gilded_rose = GildedRose([item])
+        gilded_rose.update_quality()
+        self.assertEqual(4, item.sell_in)
+        self.assertEqual(0, item.quality)  # Would degrade by 2 but hits 0
+
+    def test_conjured_item_zero_quality(self):
+        item = self._create_item_copy(self.items['conjured']['zero_quality'])
+        gilded_rose = GildedRose([item])
+        gilded_rose.update_quality()
+        self.assertEqual(4, item.sell_in)
+        self.assertEqual(0, item.quality)  # Stays at 0
 
     def test_multiple_items(self):
         items = [

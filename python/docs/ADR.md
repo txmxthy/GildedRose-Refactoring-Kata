@@ -7,7 +7,7 @@
 - [x] Backstage passes strategy
 - [x] Sulfuras strategy
 - [x] Factory implementation
-- [ ] Conjured items strategy
+- [] Conjured items strategy
 
 ## Architecture Decision Record (ADR)
 
@@ -81,3 +81,7 @@ Factory Pattern
 * Added ItemStrategyFactory with strategy mapping
 * Simplified GildedRose class
 * All tests passing
+
+Conjured Items
+* Added tests
+* Handled as default so tests do not pass
