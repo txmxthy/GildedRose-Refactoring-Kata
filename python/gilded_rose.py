@@ -12,13 +12,15 @@ class ItemStrategy(ABC):
     def _decrease_sell_in(self, item):
         item.sell_in -= 1
 
-    def _decrease_quality(self, item):
-        if item.quality > 0:
-            item.quality -= 1
+    def _decrease_quality(self, item, amount=1):
+        for _ in range(amount):
+            if item.quality > 0:
+                item.quality -= 1
 
-    def _increase_quality(self, item):
-        if item.quality < 50:
-            item.quality += 1
+    def _increase_quality(self, item, amount=1):
+        for _ in range(amount):
+            if item.quality < 50:
+                item.quality += 1
 
 
 class RegularItemStrategy(ItemStrategy):
@@ -32,15 +34,11 @@ class RegularItemStrategy(ItemStrategy):
 
 class ConjuredItemStrategy(ItemStrategy):
     def update_quality(self, item):
-        # Degrades twice as fast as normal items
-        # Hacky, will do another implementation to show another wayde
-        self._decrease_quality(item)
-        self._decrease_quality(item)
+        self._decrease_quality(item, amount=2)
         self._decrease_sell_in(item)
 
         if item.sell_in < 0:
-            self._decrease_quality(item)
-            self._decrease_quality(item)
+            self._decrease_quality(item, amount=2)
 
 
 class AgedBrieStrategy(ItemStrategy):
@@ -58,6 +56,7 @@ class BackstagePassStrategy(ItemStrategy):
 
         if item.sell_in <= 10:
             self._increase_quality(item)
+        # Intentional double increase for backstage passes
         if item.sell_in <= 5:
             self._increase_quality(item)
 
