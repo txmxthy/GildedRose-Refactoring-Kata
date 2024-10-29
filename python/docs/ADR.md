@@ -89,3 +89,11 @@ Conjured Items
 * Added ConjuredItemStrategy for double degradation
 * Updated factory mapping
 * All tests passing
+
+## Future
+- Edge case tests
+- Multiday tests
+- Use the texttset stuff
+- Constants for quality/names
+- More docstrings (arguable, code is still very simple)
+- Validation for quality ranges, names, etc
