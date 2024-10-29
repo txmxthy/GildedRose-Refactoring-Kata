@@ -1,12 +1,59 @@
 # -*- coding: utf-8 -*-
+from abc import ABC, abstractmethod
 
-class GildedRose(object):
 
+class ItemStrategy(ABC):
+    """Abstract base class for item update strategies"""
+
+    @abstractmethod
+    def update_quality(self, item):
+        """
+        Update the quality of an item
+        """
+        pass
+
+    def _decrease_sell_in(self, item):
+        """
+        Decrease sell_in by 1
+        """
+        item.sell_in -= 1
+
+    def _decrease_quality(self, item):
+        """
+        Decrease quality, respecting minimum quality rule
+        """
+        if item.quality > 0:
+            item.quality -= 1
+
+
+class RegularItemStrategy(ItemStrategy):
+    """
+    Strategy for regular items
+    """
+
+    def update_quality(self, item):
+        self._decrease_quality(item)
+        self._decrease_sell_in(item)
+
+        if item.sell_in < 0:
+            self._decrease_quality(item)
+
+
+class GildedRose:
     def __init__(self, items):
         self.items = items
+        self.regular_strategy = RegularItemStrategy()
 
     def update_quality(self):
         for item in self.items:
+            # Handle regular items
+            if (item.name != "Aged Brie"
+                    and item.name != "Backstage passes to a TAFKAL80ETC concert"
+                    and item.name != "Sulfuras, Hand of Ragnaros"):
+                self.regular_strategy.update_quality(item)
+                continue
+
+
             if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
                 if item.quality > 0:
                     if item.name != "Sulfuras, Hand of Ragnaros":
