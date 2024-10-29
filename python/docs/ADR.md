@@ -71,3 +71,8 @@ Backstage Passes Strategy
 * Added BackstagePassStrategy with concert approach rules
 * Simplified remaining legacy code
 * All tests passing
+
+Sulfuras Strategy
+* Added SulfurasStrategy (no-op implementation)
+* Removed last of legacy code
+* All tests passing

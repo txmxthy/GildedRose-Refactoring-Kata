@@ -51,8 +51,6 @@ class BackstagePassStrategy(ItemStrategy):
 
         if item.sell_in <= 10:
             self._increase_quality(item)
-
-        # Intentional inclusive if for additional increae
         if item.sell_in <= 5:
             self._increase_quality(item)
 
@@ -62,31 +60,31 @@ class BackstagePassStrategy(ItemStrategy):
             item.quality = 0
 
 
+class SulfurasStrategy(ItemStrategy):
+    """Strategy for Sulfuras - legendary item that never changes"""
+
+    def update_quality(self, item):
+        pass  # Sulfuras never changes
+
+
 class GildedRose:
     def __init__(self, items):
         self.items = items
         self.regular_strategy = RegularItemStrategy()
         self.brie_strategy = AgedBrieStrategy()
         self.backstage_strategy = BackstagePassStrategy()
+        self.sulfuras_strategy = SulfurasStrategy()
 
     def update_quality(self):
         for item in self.items:
             if item.name == "Aged Brie":
                 self.brie_strategy.update_quality(item)
-                continue
-
-            if item.name == "Backstage passes to a TAFKAL80ETC concert":
+            elif item.name == "Backstage passes to a TAFKAL80ETC concert":
                 self.backstage_strategy.update_quality(item)
-                continue
-
-            if item.name != "Sulfuras, Hand of Ragnaros":
+            elif item.name == "Sulfuras, Hand of Ragnaros":
+                self.sulfuras_strategy.update_quality(item)
+            else:
                 self.regular_strategy.update_quality(item)
-                continue
-
-            # Original logic for Sulfuras only
-            if item.quality > 0:
-                if item.name != "Sulfuras, Hand of Ragnaros":
-                    item.quality = item.quality - 1
 
 
 class Item:
