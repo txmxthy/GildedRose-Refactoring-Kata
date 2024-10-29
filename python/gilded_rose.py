@@ -43,11 +43,31 @@ class AgedBrieStrategy(ItemStrategy):
             self._increase_quality(item)
 
 
+class BackstagePassStrategy(ItemStrategy):
+    """Strategy for Backstage passes"""
+
+    def update_quality(self, item):
+        self._increase_quality(item)
+
+        if item.sell_in <= 10:
+            self._increase_quality(item)
+
+        # Intentional inclusive if for additional increae
+        if item.sell_in <= 5:
+            self._increase_quality(item)
+
+        self._decrease_sell_in(item)
+
+        if item.sell_in < 0:
+            item.quality = 0
+
+
 class GildedRose:
     def __init__(self, items):
         self.items = items
         self.regular_strategy = RegularItemStrategy()
         self.brie_strategy = AgedBrieStrategy()
+        self.backstage_strategy = BackstagePassStrategy()
 
     def update_quality(self):
         for item in self.items:
@@ -55,35 +75,18 @@ class GildedRose:
                 self.brie_strategy.update_quality(item)
                 continue
 
-            if (item.name != "Backstage passes to a TAFKAL80ETC concert"
-                    and item.name != "Sulfuras, Hand of Ragnaros"):
+            if item.name == "Backstage passes to a TAFKAL80ETC concert":
+                self.backstage_strategy.update_quality(item)
+                continue
+
+            if item.name != "Sulfuras, Hand of Ragnaros":
                 self.regular_strategy.update_quality(item)
                 continue
 
-            # Original logic for remaining special items
-            if item.name != "Backstage passes to a TAFKAL80ETC concert":
-                if item.quality > 0:
-                    if item.name != "Sulfuras, Hand of Ragnaros":
-                        item.quality = item.quality - 1
-            else:
-                if item.quality < 50:
-                    item.quality = item.quality + 1
-                    if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                        if item.sell_in < 11:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
-                        if item.sell_in < 6:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
-            if item.name != "Sulfuras, Hand of Ragnaros":
-                item.sell_in = item.sell_in - 1
-            if item.sell_in < 0:
-                if item.name != "Backstage passes to a TAFKAL80ETC concert":
-                    if item.quality > 0:
-                        if item.name != "Sulfuras, Hand of Ragnaros":
-                            item.quality = item.quality - 1
-                else:
-                    item.quality = item.quality - item.quality
+            # Original logic for Sulfuras only
+            if item.quality > 0:
+                if item.name != "Sulfuras, Hand of Ragnaros":
+                    item.quality = item.quality - 1
 
 
 class Item:

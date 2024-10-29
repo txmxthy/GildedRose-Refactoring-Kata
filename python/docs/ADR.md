@@ -66,3 +66,8 @@ Aged Brie Strategy
 * Added AgedBrieStrategy with quality increase logic
 * Added increase_quality helper to base strategy
 * All tests passing
+
+Backstage Passes Strategy
+* Added BackstagePassStrategy with concert approach rules
+* Simplified remaining legacy code
+* All tests passing
