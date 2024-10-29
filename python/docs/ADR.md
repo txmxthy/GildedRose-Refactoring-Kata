@@ -3,10 +3,10 @@
 ## Progress
 - [x] Set up test suite with item library
 - [x] First strategy implementation (Regular items)
-- [ ] Aged Brie strategy
-- [ ] Backstage passes strategy
-- [ ] Sulfuras strategy
-- [ ] Factory implementation
+- [x] Aged Brie strategy
+- [x] Backstage passes strategy
+- [x] Sulfuras strategy
+- [x] Factory implementation
 - [ ] Conjured items strategy
 
 ## Architecture Decision Record (ADR)
@@ -75,4 +75,9 @@ Backstage Passes Strategy
 Sulfuras Strategy
 * Added SulfurasStrategy (no-op implementation)
 * Removed last of legacy code
+* All tests passing
+
+Factory Pattern
+* Added ItemStrategyFactory with strategy mapping
+* Simplified GildedRose class
 * All tests passing

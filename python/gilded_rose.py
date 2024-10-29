@@ -22,8 +22,6 @@ class ItemStrategy(ABC):
 
 
 class RegularItemStrategy(ItemStrategy):
-    """Strategy for regular items"""
-
     def update_quality(self, item):
         self._decrease_quality(item)
         self._decrease_sell_in(item)
@@ -33,8 +31,6 @@ class RegularItemStrategy(ItemStrategy):
 
 
 class AgedBrieStrategy(ItemStrategy):
-    """Strategy for Aged Brie"""
-
     def update_quality(self, item):
         self._increase_quality(item)
         self._decrease_sell_in(item)
@@ -44,8 +40,6 @@ class AgedBrieStrategy(ItemStrategy):
 
 
 class BackstagePassStrategy(ItemStrategy):
-    """Strategy for Backstage passes"""
-
     def update_quality(self, item):
         self._increase_quality(item)
 
@@ -61,30 +55,34 @@ class BackstagePassStrategy(ItemStrategy):
 
 
 class SulfurasStrategy(ItemStrategy):
-    """Strategy for Sulfuras - legendary item that never changes"""
-
     def update_quality(self, item):
-        pass  # Sulfuras never changes
+        pass
+
+
+class ItemStrategyFactory:
+    """Factory for creating item strategies"""
+
+    _strategies = {
+        "Aged Brie": AgedBrieStrategy(),
+        "Backstage passes to a TAFKAL80ETC concert": BackstagePassStrategy(),
+        "Sulfuras, Hand of Ragnaros": SulfurasStrategy()
+    }
+
+    _default_strategy = RegularItemStrategy()
+
+    @classmethod
+    def create_strategy(cls, item):
+        return cls._strategies.get(item.name, cls._default_strategy)
 
 
 class GildedRose:
     def __init__(self, items):
         self.items = items
-        self.regular_strategy = RegularItemStrategy()
-        self.brie_strategy = AgedBrieStrategy()
-        self.backstage_strategy = BackstagePassStrategy()
-        self.sulfuras_strategy = SulfurasStrategy()
 
     def update_quality(self):
         for item in self.items:
-            if item.name == "Aged Brie":
-                self.brie_strategy.update_quality(item)
-            elif item.name == "Backstage passes to a TAFKAL80ETC concert":
-                self.backstage_strategy.update_quality(item)
-            elif item.name == "Sulfuras, Hand of Ragnaros":
-                self.sulfuras_strategy.update_quality(item)
-            else:
-                self.regular_strategy.update_quality(item)
+            strategy = ItemStrategyFactory.create_strategy(item)
+            strategy.update_quality(item)
 
 
 class Item:
