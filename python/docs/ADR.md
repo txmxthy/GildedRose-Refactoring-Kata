@@ -7,7 +7,8 @@
 - [x] Backstage passes strategy
 - [x] Sulfuras strategy
 - [x] Factory implementation
-- [] Conjured items strategy
+- [x] Conjured items tests and strategy
+- [x] Updated quality methods
 
 ## Architecture Decision Record (ADR)
 
