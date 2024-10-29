@@ -85,3 +85,6 @@ Factory Pattern
 Conjured Items
 * Added tests
 * Handled as default so tests do not pass
+* Added ConjuredItemStrategy for double degradation
+* Updated factory mapping
+* All tests passing

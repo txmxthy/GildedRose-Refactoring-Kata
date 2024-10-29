@@ -30,6 +30,19 @@ class RegularItemStrategy(ItemStrategy):
             self._decrease_quality(item)
 
 
+class ConjuredItemStrategy(ItemStrategy):
+    def update_quality(self, item):
+        # Degrades twice as fast as normal items
+        # Hacky, will do another implementation to show another wayde
+        self._decrease_quality(item)
+        self._decrease_quality(item)
+        self._decrease_sell_in(item)
+
+        if item.sell_in < 0:
+            self._decrease_quality(item)
+            self._decrease_quality(item)
+
+
 class AgedBrieStrategy(ItemStrategy):
     def update_quality(self, item):
         self._increase_quality(item)
@@ -65,7 +78,8 @@ class ItemStrategyFactory:
     _strategies = {
         "Aged Brie": AgedBrieStrategy(),
         "Backstage passes to a TAFKAL80ETC concert": BackstagePassStrategy(),
-        "Sulfuras, Hand of Ragnaros": SulfurasStrategy()
+        "Sulfuras, Hand of Ragnaros": SulfurasStrategy(),
+        "Conjured Mana Cake": ConjuredItemStrategy()
     }
 
     _default_strategy = RegularItemStrategy()
