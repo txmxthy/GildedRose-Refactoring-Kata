@@ -1,0 +1,2 @@
+- Starting by updating tests to capture each case.
+- 
