@@ -51,9 +51,18 @@ This incremental approach lets us refactor safely while keeping the system worki
 
 # Implementation Log
 
+Tests
+* Made test suite with library of item cases to make referencing them easier.
+* Setup tests for each item case
+
 Regular Item Strategy
 * Added base ItemStrategy class with common quality operations
 * Implemented RegularItemStrategy for basic items
 * Modified GildedRose to use strategy for regular items only
 * All tests passing
 
+Aged Brie Strategy
+
+* Added AgedBrieStrategy with quality increase logic
+* Added increase_quality helper to base strategy
+* All tests passing
